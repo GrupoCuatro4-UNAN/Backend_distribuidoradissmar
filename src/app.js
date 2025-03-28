@@ -8,9 +8,17 @@ import rutasCompras from './routes/compras.routes.js';
 import rutasCreditos from './routes/creditos.routes.js';
 import rutasDetalles_Compras from './routes/detalles_compras.routes.js';
 import rutasDetalles_Ventas from './routes/detalles_ventas.routes.js';
+import cors from 'cors';
+
+
 
 
 const app = express();
+
+app.use(cors({
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type'],
+}));
 
 app.use(express.json());
 
