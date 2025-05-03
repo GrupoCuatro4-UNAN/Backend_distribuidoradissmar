@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { obtenerAbonos, obtenerAbono } from '../controllers/abonos.controller.js';
+import { obtenerAbonos, obtenerAbono, registrarAbono } from '../controllers/abonos.controller.js';
 
 const router = Router();
 
@@ -8,5 +8,7 @@ router.get('/abonos', obtenerAbonos);
 
 // Ruta para obtener un cliente por su ID
 router.get('/abono/:id', obtenerAbono);
+
+router.get('/registrarabono', registrarAbono);
 
 export default router;

@@ -33,6 +33,7 @@ app.use('/api', rutasDetalles_Compras);
 app.use('/api', rutasDetalles_Ventas);
 
 
+
 app.use((req, res, next) => {
     res.status(404).json({
         message: 'La ruta que ha especificado no se encuentra registrada.'

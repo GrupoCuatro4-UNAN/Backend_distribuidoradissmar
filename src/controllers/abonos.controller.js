@@ -30,3 +30,20 @@ export const obtenerAbono = async (req, res) => {
         });
     }
 };
+export const registrarAbono = async (req, res) => {
+    try {
+        const { id_cliente, monto, fecha_abono } = req.body;
+
+        const [result] = await pool.query(
+            'INSERT INTO abonos (id_cliente, monto, fecha_abono) VALUES (?, ?, ?)',
+            [id_cliente, monto, fecha_abono]
+        );
+
+        res.status(201).json({ id_abono: result.insertId });
+    } catch (error) {
+        return res.status(500).json({
+            mensaje: 'Ha ocurrido un error al registrar el abono.',
+            error: error.message
+        });
+    }
+};
