@@ -3,15 +3,13 @@ import { pool } from '../db.js';
 // Obtener todos los clientes
 export const obtenerClientes = async (req, res) => {
     try {
-        const [result] = await pool.query('SELECT * FROM Clientes');
-        res.json(result);
+      const [rows] = await pool.query('SELECT * FROM clientes');
+      res.json(rows);
     } catch (error) {
-        return res.status(500).json({
-            mensaje: 'Ha ocurrido un error al leer los datos de los clientes.',
-            error: error.message
-        });
+      res.status(500).json({ mensaje: 'Error al obtener los clientes', error });
     }
-};
+  };
+  
 
 // Obtener un cliente por su ID
 export const obtenerCliente = async (req, res) => {
@@ -76,5 +74,51 @@ export const registrarCliente = async (req, res) => {
           error: 'Error interno del servidor al registrar el cliente',
           detalles: error.message
       });
+  }
+};
+
+// Eliminar un cliente por su ID
+export const eliminarCliente = async (req, res) => {
+    try {
+      const [result] = await pool.query('DELETE FROM Clientes WHERE id_cliente = ?', [req.params.id]);
+  
+      if (result.affectedRows === 0) {
+        return res.status(404).json({
+          mensaje: `Error al eliminar el cliente. El ID ${req.params.id} no fue encontrado.`
+        });
+      }
+  
+      res.status(204).send(); // Respuesta sin contenido para indicar éxito
+    } catch (error) {
+      return res.status(500).json({
+        mensaje: 'Ha ocurrido un error al eliminar el cliente.',
+        error: error
+      });
+    }
+  };
+
+  // Actualizar un cliente por su ID (parcial o completa)
+export const actualizarCliente = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const datos = req.body;
+
+    const [resultado] = await pool.query(
+      'UPDATE Clientes SET ? WHERE id_cliente = ?',
+      [datos, id]
+    );
+
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({
+        mensaje: `El cliente con ID ${id} no existe.`,
+      });
+    }
+
+    res.status(204).send(); // Respuesta sin contenido para indicar éxito
+  } catch (error) {
+    return res.status(500).json({
+      mensaje: 'Error al actualizar el cliente.',
+      error: error,
+    });
   }
 };

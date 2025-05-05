@@ -9,6 +9,6 @@ router.get('/abonos', obtenerAbonos);
 // Ruta para obtener un cliente por su ID
 router.get('/abono/:id', obtenerAbono);
 
-router.get('/registrarabono', registrarAbono);
+router.post('/registrarabono', registrarAbono);
 
 export default router;
