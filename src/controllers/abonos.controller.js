@@ -48,7 +48,7 @@ export const registrarAbono = async (req, res) => {
     }
 
     const [result] = await pool.query(
-      'INSERT INTO Abono (id_cliente, monto, fecha_abono) VALUES (?, ?, ?)',
+      'INSERT INTO Abonos (id_cliente, monto, fecha_abono) VALUES (?, ?, ?)',
       [
         id_cliente,
         monto,
@@ -64,6 +64,27 @@ export const registrarAbono = async (req, res) => {
     return res.status(500).json({
       mensaje: 'Ha ocurrido un error al registrar el Abono.',
       error: error.message
+    });
+  }
+};
+
+
+// Eliminar una abono por su ID
+export const eliminarAbono = async (req, res) => {
+  try {
+    const [result] = await pool.query('DELETE FROM Abonos WHERE id_abono = ?', [req.params.id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        mensaje: `Error al eliminar el abono. El ID ${req.params.id} no fue encontrado.`
+      });
+    }
+
+    res.status(204).send(); // Respuesta sin contenido para indicar éxito
+  } catch (error) {
+    return res.status(500).json({
+      mensaje: 'Ha ocurrido un error al eliminar la categoría.',
+      error: error
     });
   }
 };

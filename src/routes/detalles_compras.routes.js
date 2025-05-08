@@ -4,9 +4,7 @@ import { obtenerDetalles_Compras, obtenerDetalle_Compra } from '../controllers/d
 const router = Router();
 
 // Ruta para obtener todos los clientes
-router.get('/detalles_compras', obtenerDetalles_Compras);
+router.get('/detalles_compras/:id', obtenerDetalles_Compras);
 
-// Ruta para obtener un cliente por su ID
-router.get('/detalle_compra/:id', obtenerDetalle_Compra);
 
 export default router;

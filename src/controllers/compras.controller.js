@@ -20,7 +20,7 @@ export const obtenerCompra = async (req, res) => {
 };
 
 
-// Registrar una nueva compra
+/* Registrar una nueva compra
 export const registrarCompra = async (req, res) => {
     try {
         // Extraemos los datos del cuerpo de la petición
@@ -53,7 +53,7 @@ export const registrarCompra = async (req, res) => {
             error: error.message
         });
     }
-};
+}; */
 
 // Obtener todas las compras
 export const obtenerCompras = async (req, res) => {
@@ -85,5 +85,36 @@ export const eliminarCompra = async (req, res) => {
             mensaje: 'Ha ocurrido un error al eliminar la categoría.',
             error: error
         });
+    }
+};
+
+
+// Registrar una nueva compra con detalles
+export const registrarCompra = async (req, res) => {
+    const { fecha_compra, detalles } = req.body;
+
+    try {
+        const fechaCompraFormateada = new Date(fecha_compra).toISOString().slice(0, 10); // Formato 'YYYY-MM-DD'
+        const [compraResult] = await pool.query(
+            'INSERT INTO Compras (fecha_compra) VALUES (?)',
+            [fechaCompraFormateada]
+        );
+
+        const id_compra = compraResult.insertId;
+
+        for (const detalle of detalles) {
+            await pool.query(
+                'INSERT INTO Detalles_Compras (id_compra, id_producto, cantidad, precio) VALUES (?, ?, ?, ?)',
+                [id_compra, detalle.id_producto, detalle.cantidad, detalle.precio]
+            );
+            await pool.query(
+                'UPDATE Productos SET stock = stock + ? WHERE id_producto = ?',
+                [detalle.cantidad, detalle.id_producto]
+            );
+        }
+
+        res.json({ mensaje: 'Compra registrada correctamente' });
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al registrar la compra', error: error.message });
     }
 };
