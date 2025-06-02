@@ -99,15 +99,16 @@ export const registrarVenta = async (req, res) => {
 // Actualizar una venta con sus detalles
 export const actualizarVenta = async (req, res) => {
     const { id_venta } = req.params;
-    const { id_cliente, fecha_venta, credito, detalles } = req.body;
+    const { id_cliente, fecha_venta, detalles } = req.body;
 
     try {
+        // Convertir la fecha a formato 'YYYY-MM-DD HH:MM:SS' sin la "Z"
         const fechaVentaFormateada = new Date(fecha_venta).toISOString().slice(0, 19).replace('T', ' ');
 
-        // Actualizar la venta (sin total_venta ni id_empleado porque no existen en tu tabla)
+        // Actualizar la venta (usando el formato adecuado para la fecha)
         const [ventaResult] = await pool.query(
-            'UPDATE Ventas SET id_cliente = ?, fecha_venta = ?, credito = ? WHERE id_venta = ?',
-            [id_cliente, fechaVentaFormateada, credito, id_venta]
+            'UPDATE Ventas SET id_cliente = ?, fecha_venta = ? WHERE id_venta = ?',
+            [id_cliente, fechaVentaFormateada, id_venta]
         );
 
         if (ventaResult.affectedRows === 0) {
@@ -124,7 +125,7 @@ export const actualizarVenta = async (req, res) => {
         for (const detalle of detallesActuales) {
             await pool.query(
                 'UPDATE Productos SET stock = stock + ? WHERE id_producto = ?',
-                [detalle.cantidad, detalle.id_producto, detalle.precio_detalle]
+                [detalle.cantidad, detalle.id_producto]
             );
         }
 
@@ -145,7 +146,7 @@ export const actualizarVenta = async (req, res) => {
 
         res.json({ mensaje: 'Venta actualizada correctamente' });
     } catch (error) {
+        console.error(error); // Log para el error completo
         res.status(500).json({ mensaje: 'Error al actualizar la venta', error: error.message });
     }
 };
-
