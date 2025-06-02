@@ -94,3 +94,27 @@ export const eliminarCredito = async (req, res) => {
     });
   }
 };
+
+export const actualizarCredito = async (req, res) => {
+  const { id } = req.params;
+  const {
+    tipo_credito,
+    plazo_pago,
+    tasa_interes,
+    fecha_vencimiento,
+    monto_credito,
+    limite_credito
+  } = req.body;
+
+  const [resultado] = await pool.query(
+    `UPDATE Creditos SET tipo_credito = ?, plazo_pago = ?, tasa_interes = ?, fecha_vencimiento = ?, monto_credito = ?, limite_credito = ?
+    WHERE id_credito = ?`,
+    [tipo_credito, plazo_pago, tasa_interes, fecha_vencimiento, monto_credito, limite_credito, id]
+  );
+
+  if (resultado.affectedRows === 0) {
+    return res.status(404).json({ mensaje: "Crédito no encontrado." });
+  }
+
+  res.json({ mensaje: "Crédito actualizado correctamente." });
+};

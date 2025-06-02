@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { obtenerCreditos, obtenerCredito, registrarCredito, eliminarCredito } from '../controllers/creditos.controller.js';
+import { obtenerCreditos, obtenerCredito, registrarCredito, eliminarCredito, actualizarCredito } from '../controllers/creditos.controller.js';
 
 const router = Router();
 
@@ -14,5 +14,6 @@ router.post('/registrarcredito', registrarCredito);
 // Ruta para eliminar un cliente por su ID
 router.delete('/eliminarcredito/:id', eliminarCredito);
 
+router.put('/creditos/:id', actualizarCredito);
 
 export default router;

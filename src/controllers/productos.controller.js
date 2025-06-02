@@ -92,3 +92,63 @@ export const eliminarProducto = async (req, res) => {
     });
   }
 };
+
+// Actualizar un producto por su ID
+export const actualizarProducto = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      nombre_producto,
+      descripcion,
+      categoria,
+      precio_unitario,
+      stock
+    } = req.body;
+
+    // Validación básica de campos requeridos
+    if (!nombre_producto || !categoria || !precio_unitario || !stock) {
+      return res.status(400).json({
+        mensaje: 'Faltan campos requeridos: nombre, categoría, precio o stock.'
+      });
+    }
+
+    // Consultar si el producto existe
+    const [producto] = await pool.query('SELECT * FROM Productos WHERE id_producto = ?', [id]);
+
+    if (producto.length === 0) {
+      return res.status(404).json({
+        mensaje: `Producto con ID ${id} no encontrado.`
+      });
+    }
+
+    // Realizar la actualización
+    const [result] = await pool.query(
+      'UPDATE Productos SET nombre_producto = ?, descripcion = ?, categoria = ?, precio_unitario = ?, stock = ? WHERE id_producto = ?',
+      [
+        nombre_producto,
+        descripcion || null, // Puede ser opcional
+        categoria,
+        precio_unitario,
+        stock,
+        id
+      ]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        mensaje: `No se realizó ninguna actualización para el producto con ID ${id}.`
+      });
+    }
+
+    res.json({
+      mensaje: 'Producto actualizado exitosamente',
+      id_producto: id
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      mensaje: 'Ha ocurrido un error al actualizar el producto.',
+      error: error.message
+    });
+  }
+};

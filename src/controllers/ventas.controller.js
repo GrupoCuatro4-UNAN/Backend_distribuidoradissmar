@@ -124,7 +124,7 @@ export const actualizarVenta = async (req, res) => {
         for (const detalle of detallesActuales) {
             await pool.query(
                 'UPDATE Productos SET stock = stock + ? WHERE id_producto = ?',
-                [detalle.cantidad, detalle.id_producto]
+                [detalle.cantidad, detalle.id_producto, detalle.precio_detalle]
             );
         }
 

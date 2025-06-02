@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { obtenerAbonos, obtenerAbono, registrarAbono, eliminarAbono } from '../controllers/abonos.controller.js';
+import { obtenerAbonos, obtenerAbono, registrarAbono, eliminarAbono, actualizarAbono } from '../controllers/abonos.controller.js';
 
 const router = Router();
 
@@ -13,5 +13,8 @@ router.post('/registrarabono', registrarAbono);
 
 // Ruta para eliminar un cliente por su ID
 router.delete('/eliminarabono/:id', eliminarAbono);
+
+router.put('/abonos/:id', actualizarAbono);
+
 
 export default router;

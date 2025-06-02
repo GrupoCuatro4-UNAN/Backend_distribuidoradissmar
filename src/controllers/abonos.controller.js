@@ -88,3 +88,48 @@ export const eliminarAbono = async (req, res) => {
     });
   }
 };
+
+export const actualizarAbono = async (req, res) => {
+  try {
+    const { id } = req.params; // <--- cambio aquí
+    const { id_cliente, monto, fecha_abono } = req.body;
+
+    if (!id_cliente || !monto || !fecha_abono) {
+      return res.status(400).json({
+        mensaje: 'Faltan campos requeridos: id_cliente, monto, fecha_abono.'
+      });
+    }
+
+    const [abonoExistente] = await pool.query('SELECT * FROM Abonos WHERE id_abono = ?', [id]);
+    if (abonoExistente.length === 0) {
+      return res.status(404).json({
+        mensaje: `El abono con ID ${id} no fue encontrado.`
+      });
+    }
+
+    const [result] = await pool.query(
+      'UPDATE Abonos SET id_cliente = ?, monto = ?, fecha_abono = ? WHERE id_abono = ?',
+      [id_cliente, monto, fecha_abono, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(400).json({
+        mensaje: 'No se pudo actualizar el abono. Verifique los datos proporcionados.'
+      });
+    }
+
+    res.status(200).json({
+      mensaje: `Abono con ID ${id} actualizado exitosamente.`,
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      mensaje: 'Ha ocurrido un error al actualizar el abono.',
+      error: error.message,
+    });
+  }
+};
+
+
+
