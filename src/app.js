@@ -9,6 +9,8 @@ import rutasCreditos from './routes/creditos.routes.js';
 import rutasDetalles_Compras from './routes/detalles_compras.routes.js';
 import rutasDetalles_Ventas from './routes/detalles_ventas.routes.js';
 import cors from 'cors';
+import rutasEstadisticas from './routes/estadisticas.routes.js';
+import rutasIA from './routes/ia.routes.js';
 
 
 
@@ -31,7 +33,8 @@ app.use('/api', rutasCompras);
 app.use('/api', rutasCreditos);
 app.use('/api', rutasDetalles_Compras);
 app.use('/api', rutasDetalles_Ventas);
-
+app.use('/api', rutasEstadisticas);
+app.use('/api', rutasIA);
 
 
 app.use((req, res, next) => {

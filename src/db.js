@@ -8,3 +8,13 @@ export const pool = createPool({
   port: DB_PORT,
   database: DB_DATABASE
 });
+
+import {DB_HOST2, DB_PORT2, DB_USER2, DB_PASSWORD2, DB_DATABASE2} from './config.js';
+
+export const pool2 = createPool({
+  host: DB_HOST2,
+  user: DB_USER2,
+  password: DB_PASSWORD2,
+  port: DB_PORT2,
+  database: DB_DATABASE2
+});
