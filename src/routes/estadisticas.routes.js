@@ -1,13 +1,19 @@
-import { Router } from 'express';
-import { totalVentasPorDia, totalVentasPorMes } from '../controllers/estadisticas.controller.js';
+import express from 'express';
+import {
+    totalVentasPorDia,
+    totalVentasPorMes,
+    totalVentasPorProducto,
+    totalVentasPorCliente,
+    totalVentasPorAnio,
+} from '../controllers/estadisticas.controller.js';
 
-const router = Router();
+const router = express.Router();
 
-// Ruta para obtener todos los empleados
+// Rutas para las estadísticas
 router.get('/totalventaspordia', totalVentasPorDia);
-
-
 router.get('/totalventaspormes', totalVentasPorMes);
-
+router.get('/ventasporproducto', totalVentasPorProducto);
+router.get('/ventasporcliente', totalVentasPorCliente);
+router.get('/totalventasporaño', totalVentasPorAnio);
 
 export default router;
